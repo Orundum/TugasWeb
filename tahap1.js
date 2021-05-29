@@ -47,7 +47,11 @@ app.get('/todo', function (req, res) {
         if (err) {
             return console.error(err.message)
         }
-        res.send(rows)
+        let task = `<div>${rows[0].list}</div>`
+        for (var i=1;i<rows.length;i++) {
+            task += `<div>${rows[i].list}</div>`
+        }
+        res.send(task)
     })
 })
 
