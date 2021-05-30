@@ -2,6 +2,7 @@ const http = require('http')
 const sqlite3 = require('sqlite3').verbose()
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 let db = new sqlite3.Database('test.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
@@ -11,10 +12,12 @@ let db = new sqlite3.Database('test.db', sqlite3.OPEN_READWRITE, (err) => {
 })
 let app = express()
 
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(express.urlencoded({extended: false}))
+app.use(express.json())
+app.use(cors())
+
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS todo (list)')
+    db.run('CREATE TABLE IF NOT EXISTS todo (id INTEGER PRIMARY KEY AUTOINCREMENT, list)')
 })
 
 app.get('/', function (req,res) {
@@ -47,11 +50,7 @@ app.get('/todo', function (req, res) {
         if (err) {
             return console.error(err.message)
         }
-        let task = `<div>${rows[0].list}</div>`
-        for (var i=1;i<rows.length;i++) {
-            task += `<div>${rows[i].list}</div>`
-        }
-        res.send(task)
+        res.json(rows)
     })
 })
 
