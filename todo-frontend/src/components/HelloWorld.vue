@@ -12,7 +12,7 @@
     <ul>
       <li v-for="item in todos" :key="item.id">{{item.list}} <button @click="hapus(item.id)">X</button></li>
     </ul>
-    <input v-model="myText"/>
+    <input type="text" v-model="myText" />
     <button @click="tambahkan">Add</button>
   </div>
 </template>
@@ -25,7 +25,7 @@ import axios from 'axios'
         // nilai: 0,
         // nama: 'Budi'
         todos : [],
-        myText : ' '
+        myText : ''
       }
     },
     created: function () {
@@ -41,11 +41,17 @@ import axios from 'axios'
       tambahkan: function(){
         const newItem = {list: this.myText}
         axios.post('http://localhost:3000/todo', newItem)
-        this.todos.push ({newItem})
+        this.todos.push(newItem)
         //this.todos.push ({list : this.myText})
       },
-      hapus: function(id) {
-        axios.delete(`http:localhost:3000/todo/${id}`)
+      hapus: function (id) {
+        axios.delete(`http://localhost:3000/todo/${id}`)
+          .then(
+            axios.get('http://localhost:3000/todo')
+              .then(result=>{
+                this.todos = result.data
+              })
+          )
       }
     }
   }
