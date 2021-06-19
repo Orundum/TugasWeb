@@ -40,6 +40,7 @@ import axios from 'axios'
       // },
       tambahkan: function(){
         const newItem = {list: this.myText}
+        console.log(newItem)
         axios.post('http://localhost:3000/todo', newItem)
         this.todos.push(newItem)
         //this.todos.push ({list : this.myText})

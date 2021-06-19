@@ -51,7 +51,7 @@ app.get('/todo', function (req, res) {
         if (err) {
             return console.error(err.message)
         }
-        res.send(rows)
+        res.json(rows)
     })
 })
 
